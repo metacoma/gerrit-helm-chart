@@ -1,0 +1,71 @@
+replicaCount: 1
+
+image:
+  repository: openfrontier/gerrit
+  tag: 2.13.11
+  pullPolicy: IfNotPresent
+
+gerrit:
+  env:
+    AUTH_TYPE: DEVELOPMENT_BECOME_ANY_ACCOUNT
+
+web:
+  service: 
+    type: ClusterIP
+    port: 8080
+
+  ingress:
+    enabled: false
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+    path: /
+    hosts: []
+#      - host
+    tls: []
+#      - secretName: tls
+#        hosts:
+#          - host
+
+ssh:
+  service: 
+    type: LoadBalancer
+    port: 29418
+
+libs:
+  - url: https://bintray.com/artifact/download/thesamet/maven/gerrit-saml-plugin-2.12-1.jar 
+    dest: 
+    md5sum: 
+  - url: http://repo2.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar
+  - url: https://www.bouncycastle.org/download/bcprov-jdk15on-154.jar
+
+
+plugins:
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-delete-project-stable-2.13/lastStableBuild/artifact/buck-out/gen/plugins/delete-project/delete-project.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-admin-console-stable-2.13/lastStableBuild/artifact/buck-out/gen/plugins/admin-console/admin-console.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-avatars-gravatar-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/avatars-gravatar/avatars-gravatar.jar"
+  - url: "https://gerrit-ci.gerritforge.com/view/Gerrit/job/Gerrit-buck-stable-2.13/lastSuccessfulBuild/artifact/gerrit/buck-out/gen/plugins/commit-message-length-validator/commit-message-length-validator.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/Gerrit-buck-stable-2.13/lastSuccessfulBuild/artifact/gerrit/buck-out/gen/plugins/download-commands/download-commands.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-gitiles-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/gitiles/gitiles.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-importer-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/importer/importer.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-its-jira-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/its-jira/its-jira.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-javamelody-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/javamelody/javamelody.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-ref-protection-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/ref-protection/ref-protection.jar"
+  - url: "https://gerrit-ci.gerritforge.com/view/Gerrit/job/Gerrit-buck-stable-2.13/lastSuccessfulBuild/artifact/gerrit/buck-out/gen/plugins/reviewnotes/reviewnotes.jar"
+  - url: "https://gerrit-ci.gerritforge.com/view/Plugins-stable-2.13/job/plugin-serviceuser-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/serviceuser/serviceuser.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-uploadvalidator-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/uploadvalidator/uploadvalidator.jar"
+  - url: "https://gerrit-ci.gerritforge.com/job/plugin-reviewers-stable-2.13/lastSuccessfulBuild/artifact/buck-out/gen/plugins/reviewers/reviewers.jar"
+
+
+volumes:
+  git:
+    mountPath: /var/gerrit
+    size: 32G
+#  db:
+#    mountPath: /var/gerrit/db
+#    size: 8G
+#  index:
+#    mountPath: /var/gerrit/index
+#    size: 8G
+#  cache:
+#    mountPath: /var/gerrit/cache
+#    size: 8G

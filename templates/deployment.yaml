@@ -1,0 +1,64 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "gerrit.fullname" . }}
+  labels:
+    app: {{ template "gerrit.name" . }}
+    chart: {{ template "gerrit.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "gerrit.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "gerrit.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: ssh
+              containerPort: 29418
+              protocol: TCP
+{{- if .Values.gerrit.env }}
+          env:
+    {{- range $key, $value := .Values.gerrit.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+    {{- end }}
+{{- end }}
+          
+#          command: ["/bin/sh", "-c"]
+#          args: 
+#            - git config -f /var/gerrit/etc/gerrit.config gerrit.canonicalWebUrl "${CANONICAL_WEB_URL:-http://$HOSTNAME}" 
+#            - git config -f /var/gerrit/etc/gerrit.config noteDb.changes.autoMigrate true 
+#            - /var/gerrit/bin/gerrit.sh run
+
+          volumeMounts:
+            - mountPath: /docker-entrypoint-init.d/
+              name: gerrit-config
+  {{- range $key, $volume := .Values.volumes }}
+            - mountPath: {{ $volume.mountPath | quote }}
+              name: {{ $key | quote}}
+              readOnly: false
+  {{ end }}
+
+      volumes:
+        - name: gerrit-config
+          configMap:
+            name: gerrit-config
+  {{- range $key, $volume := .Values.volumes }}
+        - name: {{ $key | quote}}
+          persistentVolumeClaim:
+            claimName: {{ $key | quote}}
+  {{- end }}
