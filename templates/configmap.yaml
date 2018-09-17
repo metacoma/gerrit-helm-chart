@@ -13,16 +13,16 @@ data:
     PLUGINS_DIR=${GERRIT_SITE}/plugins/
     
     {{- range $lib := .Values.libs }}
-    ls -ltr
+#    ls -ltr
     su-exec ${GERRIT_USER} sh -c "cd ${LIBRARY_DIR} && curl -fLO {{ $lib.url }}"
     {{- end }}
     
-    echo "XXXX PLUGIN_DIR: $PLUGINS_DIR"
-    echo "XXXX PWD: `pwd`"
+#    echo "XXXX PLUGIN_DIR: $PLUGINS_DIR"
+#    echo "XXXX PWD: `pwd`"
     {{- range $plugin := .Values.plugins }}
-    echo "XXXX PWD: `pwd`"
-    echo "XXXX LS"
-    ls -ltr 
+#    echo "XXXX PWD: `pwd`"
+#    echo "XXXX LS"
+#    ls -ltr 
     su-exec ${GERRIT_USER} sh -c "cd ${PLUGINS_DIR} && curl -fLO {{ $plugin.url }}"
     {{- end }}
 
