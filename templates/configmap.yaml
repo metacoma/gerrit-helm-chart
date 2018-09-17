@@ -8,7 +8,7 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 data:
   # When the config map is mounted as a volume, these will be created as files.
-  helloworld.sh: |
+  lib-plugins.sh: |
     LIBRARY_DIR=${GERRIT_SITE}/lib/
     PLUGINS_DIR=${GERRIT_SITE}/plugins/
     
