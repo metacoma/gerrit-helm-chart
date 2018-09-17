@@ -57,15 +57,15 @@ plugins:
 
 
 volumes:
-  git:
-    mountPath: /var/gerrit
-    size: 32G
-#  db:
-#    mountPath: /var/gerrit/db
-#    size: 8G
-#  index:
-#    mountPath: /var/gerrit/index
-#    size: 8G
-#  cache:
-#    mountPath: /var/gerrit/cache
-#    size: 8G
+#  git:
+#    mountPath: /var/gerrit
+#    size: 32G
+  db:
+    mountPath: /var/gerrit/db
+    size: 1G
+  index:
+    mountPath: /var/gerrit/index
+    size: 1G
+  cache:
+    mountPath: /var/gerrit/cache
+    size: 1G
